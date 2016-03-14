@@ -8,6 +8,8 @@ import android.widget.TextView;
 import java.text.NumberFormat;
 
 public class MainActivity extends AppCompatActivity {
+    int mQuantity = 0;
+    int mPrice = 5;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -15,37 +17,46 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
     }
 
-
     public void submitOrder(View view) {
-        display(1);
+        displayTotalPrice();
     }
 
-    private void display(int number) {
-        TextView quantityTextView = (TextView)findViewById(R.id.quantity_text_view);
-        quantityTextView.setText(String.valueOf(number));
+    private void displayQuantity() {
+        TextView quantityTextView = (TextView) findViewById(R.id.quantity_text_view);
+        quantityTextView.setText(String.valueOf(mQuantity));
+    }
 
-        TextView priceTextView = (TextView)findViewById(R.id.price_text_view);
-        int price = 5;
-        int total = price;
-        String myString= NumberFormat.getCurrencyInstance().format(total);
-        priceTextView.setText(myString);
+    private void displayTotalPrice() {
+        TextView priceTextView = (TextView) findViewById(R.id.price_text_view);
+        int total = mPrice * mQuantity;
+        String myString = NumberFormat.getCurrencyInstance().format(total);
+        String message = myString + (mQuantity == 0? "\nFree" : "\nThank you!");
+        priceTextView.setText(message);
+    }
+
+    private void resetPrice() {
+        TextView priceTextView = (TextView) findViewById(R.id.price_text_view);
+        priceTextView.setText("");
     }
 
     public void increment(View view) {
-        int quantity = getQuantity();
-        display(++quantity);
+        ++mQuantity;
+        displayQuantity();
+        resetPrice();
     }
 
     private int getQuantity() {
-        TextView quantityTextView = (TextView)findViewById(R.id.quantity_text_view);
+        TextView quantityTextView = (TextView) findViewById(R.id.quantity_text_view);
         String quantityString = quantityTextView.getText().toString();
         return Integer.parseInt(quantityString);
     }
 
     public void decrement(View view) {
-        int quantity = getQuantity();
-        if (quantity > 0) {
-            display(--quantity);
+
+        if (mQuantity > 0) {
+            --mQuantity;
+            displayQuantity();
+            resetPrice();
         }
 
 
