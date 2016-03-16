@@ -3,13 +3,14 @@ package com.example.student.lab02_interactive;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
-import java.text.NumberFormat;
-
 public class MainActivity extends AppCompatActivity {
-    int mQuantity = 0;
-    int mPrice = 5;
+    private int mQuantity = 0;
+    private int mPrice = 5;
+    private final String mNT$ = "MT$";
+    private StringBuilder mTotalPriceMessage = new StringBuilder(mNT$);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,9 +30,11 @@ public class MainActivity extends AppCompatActivity {
     private void displayTotalPrice() {
         TextView priceTextView = (TextView) findViewById(R.id.price_text_view);
         int total = mPrice * mQuantity;
-        String myString = NumberFormat.getCurrencyInstance().format(total);
-        String message = myString + (mQuantity == 0? "\nFree" : "\nThank you!");
-        priceTextView.setText(message);
+        int startIndex = mNT$.length();
+        int endIndex = mTotalPriceMessage.length();
+        mTotalPriceMessage.delete(startIndex,endIndex).append(total)
+                .append(mQuantity==0? "\nFree" : "\nThank you!");
+        priceTextView.setText(mTotalPriceMessage);
     }
 
     private void resetPrice() {
@@ -52,13 +55,20 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void decrement(View view) {
-
         if (mQuantity > 0) {
             --mQuantity;
             displayQuantity();
             resetPrice();
         }
+    }
 
+    public void clickToppings(View view) {
+
+        final CheckBox checkBox = (CheckBox)findViewById(R.id.toppings_checkbox);
+
+        if (checkBox.isChecked()){
+
+        }
 
     }
 }
