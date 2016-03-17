@@ -8,44 +8,86 @@ import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
     private int mQuantity = 0;
-    private int mPrice = 5;
-    private final String mNT$ = "MT$";
+    private int mPrice = 50;
+    private String mName = "鳴人";
+    private StringBuilder mPriceMessage = new StringBuilder("NT$" + mPrice);
+    private StringBuilder mQuantityMessage = new StringBuilder(mQuantity);
+    private final String mNT$ = "NT$";
     private StringBuilder mTotalPriceMessage = new StringBuilder(mNT$);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        displayPriceMessage();
+    }
+
+    private void displayQuantityMessage() {
+        TextView quantityTextView = (TextView) findViewById(R.id.quantity_text_view);
+        int start = 0;
+        int end = mQuantityMessage.length();
+        mQuantityMessage.delete(start, end).append(mQuantity);
+        quantityTextView.setText(String.valueOf(mQuantityMessage));
+    }
+
+    public void increment(View view) {
+        ++mQuantity;
+        displayQuantityMessage();
+    }
+
+    public void decrement(View view) {
+        if (mQuantity > 0) {
+            --mQuantity;
+            displayQuantityMessage();
+        }
     }
 
     public void submitOrder(View view) {
+        clearPriceMessageString();
+        concatPriceMessageString();
         displayTotalPrice();
     }
 
-    private void displayQuantity() {
-        TextView quantityTextView = (TextView) findViewById(R.id.quantity_text_view);
-        quantityTextView.setText(String.valueOf(mQuantity));
+    private void clearPriceMessageString() {
+        mPriceMessage.delete(0, mPriceMessage.length());
+    }
+
+    private void concatPriceMessageString() {
+        CheckBox checkBox = (CheckBox)findViewById(R.id.toppings_checkbox);
+        mPriceMessage.append("Name :")
+                .append(mName)
+                .append("\n")
+                .append("加泡菜 ? ")
+                .append(checkBox.isChecked())
+                .append("\n");
+        if (mQuantity == 0) {
+            mPriceMessage.append("Free");
+        } else {
+            mPriceMessage.append("Quantity :")
+                    .append(mQuantity)
+                    .append("\n")
+                    .append("Total : ")
+                    .append("NT$")
+                    .append(mPrice * mQuantity)
+                    .append("\n")
+                    .append("Thank you!")
+                    .append("\n");
+        }
+    }
+
+    private void displayPriceMessage() {
+        TextView priceTextView = (TextView) findViewById(R.id.price_text_view);
+        priceTextView.setText(mPriceMessage);
     }
 
     private void displayTotalPrice() {
         TextView priceTextView = (TextView) findViewById(R.id.price_text_view);
-        int total = mPrice * mQuantity;
-        int startIndex = mNT$.length();
-        int endIndex = mTotalPriceMessage.length();
-        mTotalPriceMessage.delete(startIndex,endIndex).append(total)
-                .append(mQuantity==0? "\nFree" : "\nThank you!");
-        priceTextView.setText(mTotalPriceMessage);
+        priceTextView.setText(mPriceMessage);
     }
 
     private void resetPrice() {
         TextView priceTextView = (TextView) findViewById(R.id.price_text_view);
         priceTextView.setText("");
-    }
-
-    public void increment(View view) {
-        ++mQuantity;
-        displayQuantity();
-        resetPrice();
     }
 
     private int getQuantity() {
@@ -54,21 +96,7 @@ public class MainActivity extends AppCompatActivity {
         return Integer.parseInt(quantityString);
     }
 
-    public void decrement(View view) {
-        if (mQuantity > 0) {
-            --mQuantity;
-            displayQuantity();
-            resetPrice();
-        }
-    }
-
     public void clickToppings(View view) {
-
         final CheckBox checkBox = (CheckBox)findViewById(R.id.toppings_checkbox);
-
-        if (checkBox.isChecked()){
-
-        }
-
     }
 }
