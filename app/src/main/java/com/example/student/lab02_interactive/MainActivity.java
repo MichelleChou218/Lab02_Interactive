@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
     private void clearPriceMessageString() {
         int start = 0;
         int end = mPriceMessage.length();
-        mPriceMessage.delete(start, end );
+        mPriceMessage.delete(start, end);
     }
 
     private void concatPriceMessageString() {
@@ -112,5 +112,21 @@ public class MainActivity extends AppCompatActivity {
         mPriceMessage.append("臭豆腐")
                 .append("NT$")
                 .append(mPrice);
+    }
+
+    public void mediator(View view) {
+        switch (view.getId()) {
+            case R.id.toppings_checkbox:
+                clickToppings(view);
+                break;
+            case R.id.increment_button:
+                increment(view);
+                break;
+            case R.id.decrement_button:
+                decrement(view);
+                break;
+            case R.id.order_button:
+                submitOrder(view);
+        }
     }
 }
